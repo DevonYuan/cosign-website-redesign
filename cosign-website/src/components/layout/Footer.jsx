@@ -8,7 +8,7 @@ export function Footer() {
     <footer className="wrap" role="contentinfo">
       <div className="foot-row">
         <span>© 2026 Innershell. All rights reserved.</span>
-        <span className="foot-prompt"><span className="sym">›</span> watching github.com/innershell for approvals<span className="caret" /></span>
+        <span className="foot-prompt"><span className="sym">›</span> monitoring approvals — innershell.io<span className="caret" /></span>
       </div>
     </footer>
   );

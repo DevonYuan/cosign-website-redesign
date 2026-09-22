@@ -5,17 +5,17 @@ import { useState, useEffect } from 'react';
  * Hero with terminal panel showing sample approval audit log
  */
 export function Hero({ onNavigate }) {
-  const [hashValue, setHashValue] = useState('8398e481f5c3...9a2f');
+  const [hashValue, setHashValue] = useState('a1f4e8...9c2f');
 
   // Live hash update — simulates frozen snapshot proof
   useEffect(() => {
     const interval = setInterval(() => {
       const chars = '0123456789abcdef';
       let hash = '';
-      for (let i = 0; i < 16; i++) {
+      for (let i = 0; i < 12; i++) {
         hash += chars[Math.floor(Math.random() * chars.length)];
       }
-      setHashValue(`${hash}...9a2f`);
+      setHashValue(`${hash}...9c2f`);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -31,7 +31,7 @@ export function Hero({ onNavigate }) {
     <section id="home" className="hero wrap">
       <div className="hero-grid">
         <div>
-          <p className="prompt-line"><span className="sym">›</span> triggered by pull_request.review_requested</p>
+          <p className="prompt-line"><span className="sym">›</span> triggered by approval.requested</p>
           <h1>Approvals that still hold up when someone asks for proof.</h1>
           <p className="lede">
             Cosign is a GitHub App that freezes the exact issue or pull
@@ -48,7 +48,7 @@ export function Hero({ onNavigate }) {
             </a>
           </div>
           <div className="hash-row">
-            <span>sha256:</span>
+            <span>content-hash:</span>
             <code>{hashValue}</code>
             <span className="tag">frozen</span>
           </div>
@@ -57,11 +57,11 @@ export function Hero({ onNavigate }) {
         <div className="term" aria-label="Sample approval audit log">
           <div className="term-head">
             <div className="dots"><span /><span /><span /></div>
-            webhook log · pr #412
+            audit log · session #412
           </div>
           <div className="term-body">
-            <div className="term-cmd"><span className="sym">›</span> pull_request.opened <span className="term-mut">#412</span></div>
-            <div className="term-out">cosign: snapshot frozen — sha256:8398e481f5c3</div>
+            <div className="term-cmd"><span className="sym">›</span> approval.requested <span className="term-mut">#412</span></div>
+            <div className="term-out">cosign: snapshot frozen — content-hash:a1f4e8</div>
             <div className="term-out">cosign: routed to <span className="term-amber">@m.chen</span>, <span className="term-amber">@d.patel</span></div>
             <div className="term-rule">───────────────────────────────</div>
             <div className="term-cmd"><span className="sym">›</span> m.chen re-authenticated <span className="term-ok">✓</span></div>
