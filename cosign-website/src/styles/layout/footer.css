@@ -1,0 +1,23 @@
+/* Footer — Terminal Theme */
+footer {
+  padding: 40px 0 56px;
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
+.foot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12.5px;
+  color: var(--paper-mut);
+}
+
+.foot-prompt {
+  color: var(--paper-dim);
+}
+
+.foot-prompt .sym {
+  color: var(--amber-dim);
+}

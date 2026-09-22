@@ -1,0 +1,12 @@
+/* Main CSS Entry Point - Imports all styles */
+@import './variables.css';
+@import './components/button.css';
+@import './components/card.css';
+@import './components/modal.css';
+@import './components/terminal.css';
+@import './layout/header.css';
+@import './layout/footer.css';
+@import './sections/hero.css';
+@import './sections/features.css';
+@import './sections/pricing.css';
+@import './sections/support.css';

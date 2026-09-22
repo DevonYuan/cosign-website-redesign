@@ -1,0 +1,257 @@
+/* Terminal Shared Components — Bright Theme */
+.term {
+  background: var(--bg-inset);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--plate-elevation);
+}
+
+.term-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 11.5px;
+  color: var(--paper-mut);
+}
+
+.term-head .dots span {
+  width: 8px;
+  height: 8px;
+}
+
+.term-body {
+  padding: 18px 18px 20px;
+  font-size: 12.8px;
+  line-height: 1.85;
+}
+
+.term-cmd {
+  color: var(--paper);
+}
+
+.term-cmd .sym {
+  color: var(--amber);
+  margin-right: 2px;
+}
+
+.term-out {
+  color: var(--paper-dim);
+  padding-left: 1.4em;
+}
+
+.term-ok {
+  color: var(--green);
+}
+
+.term-amber {
+  color: var(--amber);
+}
+
+.term-mut {
+  color: var(--paper-mut);
+}
+
+.term-rule {
+  color: var(--paper-mut);
+  opacity: 0.4;
+  padding-left: 1.4em;
+}
+
+/* Window dots - macOS traffic light style for light theme */
+.dots {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.dots span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: block;
+}
+
+.dots span:nth-child(1) {
+  background: #ff5f57;
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
+}
+
+.dots span:nth-child(2) {
+  background: #febc2e;
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
+}
+
+.dots span:nth-child(3) {
+  background: #28ca42;
+  box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
+}
+
+/* Section styling */
+.section {
+  padding-top: 78px;
+  padding-bottom: 78px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.section-head {
+  margin-bottom: 44px;
+  max-width: 700px;
+}
+
+.cmd {
+  color: var(--green);
+  font-size: 13px;
+  margin: 0 0 16px;
+}
+
+h2 {
+  font-size: var(--cap-h2);
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--paper);
+  margin: 0 0 14px;
+}
+
+.section-head p {
+  color: var(--paper-dim);
+  font-size: 14.5px;
+  max-width: 85ch;
+  margin: 0;
+}
+
+/* CTA row */
+.cta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.cta-primary,
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  padding: 11px 16px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.cta-primary {
+  background: var(--amber);
+  color: #ffffff;
+  border: 1px solid var(--amber);
+}
+
+.cta-primary:hover {
+  background: var(--amber-dim);
+  border-color: var(--amber-dim);
+}
+
+.cta-secondary {
+  color: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.cta-secondary:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: rgba(169, 122, 38, 0.08);
+}
+
+/* Hash row */
+.hash-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  color: var(--paper-mut);
+}
+
+.hash-row code {
+  color: var(--paper-dim);
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--line-soft);
+}
+
+/* Tag/badge */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--green-dim);
+  color: var(--green);
+  background: rgba(45, 138, 78, 0.08);
+}
+
+.tag::before {
+  content: "●";
+  font-size: 8px;
+}
+
+/* Group label */
+.grp-label {
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--paper-mut);
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.grp-label b {
+  color: var(--amber-dim);
+  font-weight: 500;
+}
+
+/* Flag row */
+.flag-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+.flag {
+  font-size: 12.5px;
+  color: var(--amber);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  background: rgba(169, 122, 38, 0.08);
+}
+
+.flag span {
+  color: var(--paper-mut);
+}
+
+/* Band */
+.band {
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .titlebar-path {
+    display: none;
+  }
+}
+
+/* Overflow safety for wide inline code on narrow screens */
+.hash-row {
+  overflow-x: auto;
+}

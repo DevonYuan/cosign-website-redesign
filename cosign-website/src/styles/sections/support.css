@@ -1,0 +1,67 @@
+/* Support Section — Terminal Theme */
+.section-support {
+  padding-top: 78px;
+  padding-bottom: 78px;
+  border-bottom: none;
+}
+
+.support-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line-soft);
+  border: 1px solid var(--line-soft);
+}
+
+.support-card {
+  background: var(--bg);
+  padding: 26px 24px 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.support-card .cmd {
+  margin-bottom: 14px;
+}
+
+.support-card h3 {
+  font-size: 16px;
+  color: var(--paper);
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+
+.support-card p {
+  font-size: 13.5px;
+  color: var(--paper-dim);
+  margin: 0 0 18px;
+  max-width: 42ch;
+}
+
+.support-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.support-links a {
+  font-size: 13px;
+  color: var(--amber);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.support-links a:hover {
+  text-decoration: underline;
+}
+
+.support-links a span {
+  color: var(--paper-mut);
+}
+
+@media (max-width: 760px) {
+  .support-grid {
+    grid-template-columns: 1fr;
+  }
+}

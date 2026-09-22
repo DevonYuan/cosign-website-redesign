@@ -1,0 +1,149 @@
+/* Modal Components — Terminal Theme */
+.contact-modal {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0;
+  background: var(--bg-inset);
+  color: var(--paper);
+  width: min(480px, 92vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 30px 60px -30px rgba(169,122,38,0.15);
+  margin: auto; /* Center the dialog in viewport */
+}
+
+.contact-modal::backdrop {
+  background: rgba(6, 9, 7, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+.contact-form {
+  position: relative;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-form h3 {
+  margin: 0;
+  padding-right: 24px;
+  color: var(--paper);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--paper-mut);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: color var(--transition-fast), background var(--transition-fast);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  color: var(--amber);
+  background: rgba(255, 182, 42, 0.1);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--paper-dim);
+}
+
+.field label {
+  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--amber-dim);
+}
+
+.field input,
+.field select,
+.field textarea {
+  font-family: var(--font-body);
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-soft);
+  background: var(--bg);
+  color: var(--paper);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  font-size: 13px;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(255, 182, 42, 0.12);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.contact-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.contact-status {
+  margin: 0;
+  font-size: 12px;
+  min-height: 1.2em;
+  color: var(--paper-mut);
+  font-family: var(--font-mono);
+}
+
+.contact-status-success {
+  color: var(--green);
+}
+
+.contact-status-error {
+  color: var(--red);
+}
+
+/* Button variants for modal */
+.contact-modal .button-plate {
+  background: var(--amber);
+  color: #0a0a08;
+  border: 1px solid var(--amber);
+}
+
+.contact-modal .button-plate:hover {
+  background: #ffc65c;
+  border-color: #ffc65c;
+}
+
+.contact-modal .button-ghost {
+  color: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.contact-modal .button-ghost:hover {
+  border-color: var(--amber-dim);
+  color: var(--amber);
+}

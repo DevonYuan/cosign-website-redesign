@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cosign — approvals that hold up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --bg:        #060907;
+    --bg-raised: #0c1310;
+    --bg-inset:  #04100a;
+    --line:      rgba(255,179,42,0.22);
+    --line-soft: rgba(233,228,216,0.10);
+    --amber:     #ffb62a;
+    --amber-dim: #a97a26;
+    --paper:     #e9e4d6;
+    --paper-dim: #a6a195;
+    --paper-mut: #7c8079;
+    --green:     #6dffb3;
+    --green-dim: #3f8f68;
+    --red:       #ff6b5e;
+    --radius:    3px;
+    font-size: 16px;
+
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--paper);
+    font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* faint scanline + vignette texture, static, not animated */
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.018) 0px,
+        rgba(255,255,255,0.018) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    mix-blend-mode: overlay;
+  }
+  body::after{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 49;
+    background: radial-gradient(ellipse at 50% 0%, rgba(255,182,42,0.05), transparent 60%),
+                radial-gradient(ellipse at 50% 120%, rgba(0,0,0,0.55), transparent 55%);
+  }
+
+  a{ color: inherit; }
+
+  ::selection{ background: var(--amber); color: #0a0a08; }
+
+  .wrap{
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- caret ---------- */
+  .caret{
+    display: inline-block;
+    width: 0.58em;
+    height: 1em;
+    background: var(--amber);
+    vertical-align: -0.15em;
+    margin-left: 2px;
+    animation: blink 1.05s steps(1) infinite;
+  }
+  @keyframes blink{ 0%,49%{ opacity:1; } 50%,100%{ opacity:0; } }
+
+  /* ================= TITLEBAR / NAV ================= */
+  .titlebar{
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: #08110c;
+    border-bottom: 1px solid var(--line);
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .titlebar-inner{
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .dots{ display:flex; gap:7px; flex-shrink:0; }
+  .dots span{ width:11px; height:11px; border-radius:50%; display:block; }
+  .dots span:nth-child(1){ background:#ff6b5e; }
+  .dots span:nth-child(2){ background:#ffb62a; }
+  .dots span:nth-child(3){ background:#6dffb3; }
+
+  .titlebar-path{
+    color: var(--paper-mut);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .titlebar-path b{ color: var(--paper); font-weight: 500; }
+
+  nav.tabs{
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  nav.tabs a{
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--paper-mut);
+    padding: 7px 11px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+  }
+  nav.tabs a:hover{ color: var(--paper); border-color: var(--line-soft); }
+  nav.tabs a.current{
+    color: var(--amber);
+    border-color: var(--line);
+    background: rgba(255,182,42,0.06);
+  }
+  .btn-install{
+    margin-left: 6px;
+    background: var(--amber);
+    color: #0a0a08 !important;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    white-space: nowrap;
+    border: 1px solid var(--amber);
+  }
+  .btn-install:hover{ background: #ffc65c; border-color:#ffc65c; }
+
+  /* ================= HERO ================= */
+  .hero{
+    padding-top: 76px;
+    padding-bottom: 88px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .hero-grid{
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .prompt-line{
+    color: var(--green);
+    font-size: 13px;
+    margin: 0 0 22px;
+  }
+  .prompt-line .sym{ color: var(--amber-dim); }
+
+  h1{
+    margin: 0 0 22px;
+    font-size: clamp(28px, 4.4vw, 42px);
+    line-height: 1.18;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+  }
+
+  .lede{
+    color: var(--paper-dim);
+    font-size: 15px;
+    max-width: 62ch;
+    margin: 0 0 34px;
+  }
+  .lede b{ color: var(--paper); font-weight: 500; }
+
+  .cta-row{ display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+  .cta-primary, .cta-secondary{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    padding: 11px 16px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .cta-primary{ background: var(--amber); color:#0a0a08; border:1px solid var(--amber); }
+  .cta-primary:hover{ background:#ffc65c; }
+  .cta-secondary{ color: var(--paper); border: 1px solid var(--line); }
+  .cta-secondary:hover{ border-color: var(--amber-dim); color: var(--amber); }
+
+  .hash-row{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    color: var(--paper-mut);
+  }
+  .hash-row code{ color: var(--paper-dim); }
+  .tag{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    background: rgba(109,255,179,0.06);
+  }
+  .tag::before{ content:"●"; font-size: 8px; }
+
+  /* terminal panel */
+  .term{
+    background: var(--bg-inset);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 30px 60px -30px rgba(255,182,42,0.15);
+  }
+  .term-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 11.5px;
+    color: var(--paper-mut);
+  }
+  .term-head .dots span{ width:8px; height:8px; }
+  .term-body{
+    padding: 18px 18px 20px;
+    font-size: 12.8px;
+    line-height: 1.85;
+  }
+  .term-cmd{ color: var(--paper); }
+  .term-cmd .sym{ color: var(--amber); margin-right: 2px; }
+  .term-out{ color: var(--paper-dim); padding-left: 1.4em; }
+  .term-ok{ color: var(--green); }
+  .term-amber{ color: var(--amber); }
+  .term-mut{ color: var(--paper-mut); }
+  .term-rule{ color: var(--paper-mut); opacity:.4; padding-left: 1.4em; }
+
+  /* ================= SECTION HEADERS ================= */
+  .section{ padding-top: 78px; padding-bottom: 78px; border-bottom: 1px solid var(--line-soft); }
+  .section-head{ margin-bottom: 44px; max-width: 700px; }
+  .cmd{
+    color: var(--green);
+    font-size: 13px;
+    margin: 0 0 16px;
+  }
+  .cmd .sym{ color: var(--amber-dim); }
+  h2{
+    font-size: clamp(23px, 3vw, 30px);
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--paper);
+    margin: 0 0 14px;
+  }
+  .section-head p{ color: var(--paper-dim); font-size: 14.5px; max-width: 85ch; margin:0; }
+
+  /* ================= FEATURES: log/table rows ================= */
+  .grp-label{
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--paper-mut);
+    margin: 0 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .grp-label b{ color: var(--amber-dim); font-weight: 500; }
+
+  .log-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+    margin-bottom: 46px;
+  }
+  .log-row{
+    background: var(--bg);
+    padding: 22px 22px 24px;
+  }
+  .log-top{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom: 10px;
+  }
+  .log-status{
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 600;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .log-file{
+    color: var(--paper-mut);
+    font-size: 12px;
+  }
+  .log-row h3{
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--paper);
+    margin: 0 0 8px;
+  }
+  .log-row p{ font-size: 13.5px; color: var(--paper-dim); margin:0; max-width: 42ch; }
+
+  @media (max-width: 760px){
+    .log-grid{ grid-template-columns: 1fr; }
+  }
+  @media (min-width: 761px) and (max-width: 980px){
+    .log-grid{ grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ================= BAND: compliance flags ================= */
+  .band{
+    background: var(--bg-raised);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .flag-row{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 26px;
+  }
+  .flag{
+    font-size: 12.5px;
+    color: var(--amber);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 7px 12px;
+    background: rgba(255,182,42,0.04);
+  }
+  .flag span{ color: var(--paper-mut); }
+
+  /* ================= PRICING ================= */
+  .pricing-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+  }
+  .plan{ background: var(--bg); padding: 26px 22px 28px; display:flex; flex-direction:column; }
+  .plan.is-active{ background: var(--bg-inset); }
+  .plan-flag{ color: var(--paper-mut); font-size:12px; margin-bottom: 14px; }
+  .plan-flag.on{ color: var(--green); }
+  .plan-name{ font-size:15px; font-weight:600; color:var(--paper); margin:0 0 6px; }
+  .plan-price{ font-size: 24px; color: var(--amber); font-weight:600; margin: 0 0 16px; }
+  .plan-price sup{ font-size: 12px; color: var(--paper-mut); font-weight:400; }
+  .plan-list{ list-style:none; margin: 0 0 20px; padding:0; font-size: 13px; color: var(--paper-dim); }
+  .plan-list li{ padding: 6px 0; border-top: 1px dashed var(--line-soft); }
+  .plan-list li:first-child{ border-top:none; }
+  .plan-list li::before{ content:"+ "; color: var(--green-dim); }
+  .plan-cta{
+    margin-top: auto;
+    display:inline-block;
+    text-align:center;
+    font-size: 13px;
+    padding: 10px;
+    border-radius: var(--radius);
+    text-decoration:none;
+    border: 1px solid var(--line);
+    color: var(--paper);
+  }
+  .plan.is-active .plan-cta{ background: var(--amber); color:#0a0a08; border-color: var(--amber); font-weight:600; }
+  @media (max-width: 760px){ .pricing-grid{ grid-template-columns: 1fr; } }
+
+  /* ================= SUPPORT ================= */
+  .support-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+  }
+  .support-card{ background: var(--bg); padding: 26px 24px 28px; display:flex; flex-direction:column; }
+  .support-card .cmd{ margin-bottom: 14px; }
+  .support-card h3{ font-size: 16px; color: var(--paper); margin: 0 0 10px; font-weight:600; }
+  .support-card p{ font-size: 13.5px; color: var(--paper-dim); margin: 0 0 18px; max-width: 42ch; }
+  .support-links{ display:flex; flex-direction:column; gap:8px; margin-top:auto; }
+  .support-links a{ font-size: 13px; color: var(--amber); text-decoration:none; }
+  .support-links a:hover{ text-decoration: underline; }
+  .support-links a span{ color: var(--paper-mut); }
+  @media (max-width: 760px){ .support-grid{ grid-template-columns: 1fr; } }
+
+  /* ================= FOOTER ================= */
+  footer{ padding: 40px 0 56px; padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+  .foot-row{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 12.5px;
+    color: var(--paper-mut);
+  }
+  .foot-prompt{ color: var(--paper-dim); }
+  .foot-prompt .sym{ color: var(--amber-dim); }
+
+  @media (max-width: 900px){
+    .hero-grid{ grid-template-columns: 1fr; }
+    .titlebar-path{ display:none; }
+  }
+
+  /* overflow safety for wide inline code on narrow screens */
+  .hash-row{ overflow-x: auto; }
+</style>
+</head>
+<body>
+
+  <div class="titlebar">
+    <div class="titlebar-inner">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="titlebar-path"><b>Cosign</b> — approval audit log</div>
+      <nav class="tabs">
+        <a href="#home" class="current">home</a>
+        <a href="#features">features</a>
+        <a href="#pricing">pricing</a>
+        <a href="#support">support</a>
+        <a href="#" class="btn-install">install on github</a>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+
+    <section id="home" class="hero wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="prompt-line"><span class="sym">›</span> triggered by pull_request.review_requested</p>
+          <h1>Approvals that still hold up when someone asks for proof.</h1>
+          <p class="lede">
+            Cosign is a GitHub App that freezes the exact issue or pull
+            request being approved, re-checks each signer's identity, and
+            writes a tamper-evident record — so your sign-off means the
+            same thing today and in an audit three years from now.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="cta-primary">install on github</a>
+            <a href="#features" class="cta-secondary">see how it works</a>
+          </div>
+          <div class="hash-row">
+            <span>sha256:</span>
+            <code>8398e481f5c3…9a2f</code>
+            <span class="tag">frozen</span>
+          </div>
+        </div>
+
+        <div class="term" aria-label="Sample approval audit log">
+          <div class="term-head">
+            <div class="dots"><span></span><span></span><span></span></div>
+            webhook log · pr #412
+          </div>
+          <div class="term-body">
+            <div class="term-cmd"><span class="sym">›</span> pull_request.opened <span class="term-mut">#412</span></div>
+            <div class="term-out">cosign: snapshot frozen — sha256:8398e481f5c3</div>
+            <div class="term-out">cosign: routed to <span class="term-amber">@m.chen</span>, <span class="term-amber">@d.patel</span></div>
+            <div class="term-rule">───────────────────────────────</div>
+            <div class="term-cmd"><span class="sym">›</span> m.chen re-authenticated <span class="term-ok">✓</span></div>
+            <div class="term-out">signed — "approve for release 4.2"</div>
+            <div class="term-rule">───────────────────────────────</div>
+            <div class="term-cmd"><span class="sym">›</span> d.patel re-authenticated <span class="term-ok">✓</span></div>
+            <div class="term-out">signed — "approve for release 4.2"</div>
+            <div class="term-out">manifest.pdf written</div>
+            <div class="term-out">status: <span class="term-ok">FROZEN</span><span class="caret"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section wrap">
+      <div class="section-head">
+        <p class="cmd"><span class="sym">›</span> check_run.completed <span class="term-ok">6/6</span></p>
+        <h2>Every approval, checked against the same suite.</h2>
+        <p>
+          Issue comments and merged PRs are easy to edit after the fact.
+          Cosign runs each approval through six checks before it will
+          call a record "signed" — the same six checks, every time.
+        </p>
+      </div>
+
+      <p class="grp-label"><b>review &amp; approval</b> · 3 passed</p>
+      <div class="log-grid">
+        <div class="log-row">
+          <div class="log-top"><span class="log-status">✓ pass</span><span class="log-file">snapshot.lock</span></div>
+          <h3>Exact snapshot capture</h3>
+          <p>The issue or PR content is hashed at routing time, so the version a signer reviewed can never quietly drift from the version they approved.</p>
+        </div>
+        <div class="log-row">
+          <div class="log-top"><span class="log-status">✓ pass</span><span class="log-file">intent.review</span></div>
+          <h3>Declared intent review</h3>
+          <p>Each signer sees the exact approval meaning and checklist before deciding to approve, reject, or send it back for changes.</p>
+        </div>
+        <div class="log-row">
+          <div class="log-top"><span class="log-status">✓ pass</span><span class="log-file">reauth.check</span></div>
+          <h3>Fresh re-authentication</h3>
+          <p>Approvers are challenged again at sign time, so a decision is tied to a live identity check, not a session left open in a browser tab.</p>
+        </div>
+      </div>
+
+      <p class="grp-label"><b>operational controls</b> · 3 passed</p>
+      <div class="log-grid">
+        <div class="log-row">
+          <div class="log-top"><span class="log-status">✓ pass</span><span class="log-file">manifest.pdf</span></div>
+          <h3>Audit-ready PDF manifests</h3>
+          <p>A finished approval generates a tamper-evident PDF with signers, timestamps, declared intent, and the frozen record — ready to hand to an auditor.</p>
+        </div>
+        <div class="log-row">
+          <div class="log-top"><span class="log-status">✓ pass</span><span class="log-file">file.github</span></div>
+          <h3>GitHub filing by design</h3>
+          <p>The signed evidence is filed into a repository your org already owns, so the compliance artifact stays in the same place as the work.</p>
+        </div>
+        <div class="log-row">
+          <div class="log-top"><span class="log-status">✓ pass</span><span class="log-file">drift.alert</span></div>
+          <h3>Change detection alerts</h3>
+          <p>If the routed issue or PR changes before every signer has acted, the request is flagged stale and pushed back for re-freeze.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section band">
+      <div class="wrap">
+        <div class="section-head" style="margin-bottom:0;">
+          <p class="cmd"><span class="sym">›</span> compliance mapping</p>
+          <h2>Built for the frameworks your auditor already knows.</h2>
+          <p>
+            From design review to release sign-off, Cosign gives your team
+            one approval path, anchored to the exact GitHub content being
+            reviewed — no shadow spreadsheet, no second system of record.
+          </p>
+          <div class="flag-row">
+            <span class="flag">21 CFR Part 11</span>
+            <span class="flag">eIDAS</span>
+            <span class="flag">ESIGN / UETA</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section wrap">
+      <div class="section-head">
+        <p class="cmd"><span class="sym">~/</span>pricing</p>
+        <h2>Start free, prove it on a real repo, then scale.</h2>
+        <p>Subscription pricing is rolling out now. Pilots run in your own GitHub org, on your own approval workflow.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="plan">
+          <p class="plan-flag">solo repo</p>
+          <p class="plan-name">Starter</p>
+          <p class="plan-price">$0</p>
+          <ul class="plan-list">
+            <li>1 repository</li>
+            <li>Frozen-snapshot routing</li>
+            <li>PDF manifest export</li>
+          </ul>
+          <a href="#" class="plan-cta">install free</a>
+        </div>
+        <div class="plan is-active">
+          <p class="plan-flag on">most teams choose this</p>
+          <p class="plan-name">Team</p>
+          <p class="plan-price">$—<sup>/ seat / mo</sup></p>
+          <ul class="plan-list">
+            <li>Unlimited repositories</li>
+            <li>Re-authentication + drift alerts</li>
+            <li>Org-owned manifest filing</li>
+          </ul>
+          <a href="#support" class="plan-cta">request beta access</a>
+        </div>
+        <div class="plan">
+          <p class="plan-flag">regulated orgs</p>
+          <p class="plan-name">Pilot</p>
+          <p class="plan-price">custom</p>
+          <ul class="plan-list">
+            <li>Evaluated in your own org</li>
+            <li>21 CFR / eIDAS mapping review</li>
+            <li>Dedicated rollout support</li>
+          </ul>
+          <a href="#support" class="plan-cta">talk to us</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="support" class="section wrap" style="border-bottom:none;">
+      <div class="section-head">
+        <p class="cmd"><span class="sym">~/</span>support</p>
+        <h2>Talk with the Innershell team.</h2>
+        <p>Ask about the product, ask about pricing, or request a pilot to evaluate Cosign in your own GitHub workflow.</p>
+      </div>
+      <div class="support-grid">
+        <div class="support-card">
+          <h3>Product overview</h3>
+          <p>Learn how Cosign works for issue approvals, PR sign-off, audit integrity, and compliance-friendly filing.</p>
+          <div class="support-links">
+            <a href="#">contact us <span>→</span></a>
+          </div>
+        </div>
+        <div class="support-card">
+          <h3>Pricing &amp; pilots</h3>
+          <p>Ask about the subscription model, trial access, or early access for a pilot implementation.</p>
+          <div class="support-links">
+            <a href="#pricing">ask about pricing <span>→</span></a>
+            <a href="#">request beta access <span>→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="wrap">
+    <div class="foot-row">
+      <span>© 2026 Innershell. All rights reserved.</span>
+      <span class="foot-prompt"><span class="sym">›</span> watching github.com/innershell for approvals<span class="caret"></span></span>
+    </div>
+  </footer>
+
+</body>
+</html>
