@@ -11,3 +11,4 @@ export {
   SupportCard 
 } from './Card';
 export { ContactModal } from './Modal';
+export { ThemeSwitcher } from './ThemeSwitcher';

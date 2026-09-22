@@ -1,22 +1,98 @@
-/* CSS Custom Properties (Design Tokens) — Bright Terminal Theme */
+/* CSS Custom Properties (Design Tokens) — Terminal Themes */
+/* Default: Dark theme. Light theme activated via [data-theme="light"] on <html> */
+
 :root {
-  /* Core palette — Bright Terminal aesthetic */
-  --bg: #f5f0e8;           /* Warm paper background */
-  --bg-raised: #ffffff;    /* Raised surfaces */
-  --bg-inset: #ebe6dc;     /* Inset/terminal background */
-  --line: rgba(169, 122, 38, 0.35);   /* Amber border */
-  --line-soft: rgba(124, 128, 121, 0.18);  /* Muted border */
-  --amber: #a97a26;        /* Primary amber (darker for light bg) */
-  --amber-dim: #87641f;    /* Darker amber */
-  --paper: #1a1d19;        /* Primary text (dark) */
-  --paper-dim: #4a4d47;    /* Secondary text */
-  --paper-mut: #7c8079;    /* Muted text */
-  --green: #2d8a4e;        /* Success green (darker for light bg) */
-  --green-dim: #1e6b38;    /* Darker green */
-  --red: #c44335;          /* Error red */
+  /* ========== DARK THEME (DEFAULT) ========== */
+  --bg: #060907;
+  --bg-raised: #0c1310;
+  --bg-inset: #04100a;
+  --line: rgba(255, 179, 42, 0.22);
+  --line-soft: rgba(233, 228, 216, 0.10);
+  --amber: #ffb62a;
+  --amber-dim: #a97a26;
+  --paper: #e9e4d6;
+  --paper-dim: #a6a195;
+  --paper-mut: #7c8079;
+  --green: #6dffb3;
+  --green-dim: #3f8f68;
+  --red: #ff6b5e;
   --radius: 3px;
 
-  /* Legacy aliases for compatibility */
+  /* Legacy aliases */
+  --color-bg: var(--bg);
+  --color-chalk: var(--paper);
+  --color-chalk-muted: var(--paper-dim);
+  --color-chalk-faint: var(--paper-mut);
+  --color-thermocline: var(--amber);
+  --color-thermocline-dim: rgba(255, 182, 42, 0.35);
+  --color-thermocline-soft: rgba(255, 182, 42, 0.12);
+  --color-plate: var(--bg-raised);
+  --color-plate-border: var(--line-soft);
+  --color-plate-border-hover: var(--line);
+  --color-seal: var(--green);
+  --color-stale: var(--red);
+  --color-warning: var(--amber);
+  --color-surface: var(--bg-raised);
+  --color-surface-alt: var(--bg-inset);
+  --color-ink: var(--paper);
+  --color-ink-muted: var(--paper-dim);
+  --color-primary: var(--amber);
+  --color-primary-dark: var(--amber-dim);
+  --color-accent: var(--amber);
+  --color-accent-dark: var(--amber-dim);
+  --color-accent-soft: rgba(255, 182, 42, 0.12);
+  --color-border: var(--line-soft);
+  --color-success: var(--green);
+  --color-error: var(--red);
+
+  /* Typography — IBM Plex Mono */
+  --font-display: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-body: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Cap heights */
+  --cap-h1: clamp(28px, 4.4vw, 42px);
+  --cap-h2: clamp(23px, 3vw, 30px);
+  --cap-h3: 16px;
+  --cap-h4: 13.5px;
+  --cap-body: 15px;
+  --cap-mono: 12.8px;
+  --cap-mono-sm: 11.5px;
+
+  /* Layout */
+  --max-width: 1040px;
+  --stratum-width: 700px;
+  --radius: 3px;
+  --radius-sm: 3px;
+  --plate-elevation: 0 0 0 1px rgba(0,0,0,0.4), 0 30px 60px -30px rgba(255,182,42,0.15);
+  --plate-elevation-hover: 0 0 0 1px rgba(0,0,0,0.4), 0 30px 60px -30px rgba(255,182,42,0.15);
+
+  /* Motion */
+  --transition-fast: 0.12s ease-out;
+  --transition-normal: 0.2s ease-out;
+  --transition-slow: 0.35s ease-out;
+
+  /* Scanline texture */
+  --scanline-opacity: 0.018;
+}
+
+/* ========== LIGHT THEME ========== */
+[data-theme="light"] {
+  --bg: #f5f0e8;
+  --bg-raised: #ffffff;
+  --bg-inset: #ebe6dc;
+  --line: rgba(169, 122, 38, 0.35);
+  --line-soft: rgba(124, 128, 121, 0.18);
+  --amber: #a97a26;
+  --amber-dim: #87641f;
+  --paper: #1a1d19;
+  --paper-dim: #4a4d47;
+  --paper-mut: #7c8079;
+  --green: #2d8a4e;
+  --green-dim: #1e6b38;
+  --red: #c44335;
+
+  /* Legacy aliases */
   --color-bg: var(--bg);
   --color-chalk: var(--paper);
   --color-chalk-muted: var(--paper-dim);
@@ -43,36 +119,15 @@
   --color-success: var(--green);
   --color-error: var(--red);
 
-  /* Typography — IBM Plex Mono */
-  --font-display: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --font-body: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-
-  /* Cap heights */
-  --cap-h1: clamp(28px, 4.4vw, 42px);
-  --cap-h2: clamp(23px, 3vw, 30px);
-  --cap-h3: 16px;
-  --cap-h4: 13.5px;
-  --cap-body: 15px;
-  --cap-mono: 12.8px;
-  --cap-mono-sm: 11.5px;
-
   /* Layout */
-  --max-width: 1040px;
-  --stratum-width: 700px;
-  --radius: 3px;
-  --radius-sm: 3px;
   --plate-elevation: 0 0 0 1px rgba(0,0,0,0.08), 0 10px 30px -15px rgba(169,122,38,0.15);
   --plate-elevation-hover: 0 0 0 1px rgba(0,0,0,0.12), 0 20px 40px -20px rgba(169,122,38,0.2);
-
-  /* Motion */
-  --transition-fast: 0.12s ease-out;
-  --transition-normal: 0.2s ease-out;
-  --transition-slow: 0.35s ease-out;
 
   /* Scanline texture - subtle for light theme */
   --scanline-opacity: 0.012;
 }
+
+/* ========== BASE STYLES ========== */
 
 /* Reset & Base */
 * {
@@ -94,6 +149,8 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: env(safe-area-inset-top, 0px);
   font-size: 16px;
+  /* Smooth theme transitions */
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -119,15 +176,30 @@ body {
   -moz-osx-font-smoothing: grayscale;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Smooth theme transitions */
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
-/* Scanline + vignette texture - subtle for light theme */
+/* Scanline + vignette texture */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 50;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,var(--scanline-opacity)) 0px,
+      rgba(255,255,255,var(--scanline-opacity)) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  mix-blend-mode: overlay;
+  transition: opacity var(--transition-normal);
+}
+
+[data-theme="light"] body::before {
   background:
     repeating-linear-gradient(
       to bottom,
@@ -145,6 +217,13 @@ body::after {
   inset: 0;
   pointer-events: none;
   z-index: 49;
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(255,182,42,0.05), transparent 60%),
+    radial-gradient(ellipse at 50% 120%, rgba(0,0,0,0.55), transparent 55%);
+  transition: opacity var(--transition-normal);
+}
+
+[data-theme="light"] body::after {
   background: 
     radial-gradient(ellipse at 50% 0%, rgba(169,122,38,0.04), transparent 60%),
     radial-gradient(ellipse at 50% 120%, rgba(0,0,0,0.04), transparent 55%);
@@ -213,6 +292,11 @@ p {
 
 /* Selection */
 ::selection {
+  background: var(--amber);
+  color: #0a0a08;
+}
+
+[data-theme="light"] ::selection {
   background: var(--amber);
   color: #ffffff;
 }

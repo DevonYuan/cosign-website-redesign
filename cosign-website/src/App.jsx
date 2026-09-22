@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { Header, Footer } from './components/layout';
 import { Hero, Features, Pricing, Support } from './components/sections';
 import { ContactModal } from './components/ui';
+import { ThemeProvider } from './context/ThemeContext';
 import './styles/main.css';
 
 /**
@@ -83,7 +84,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <ThemeProvider>
       <Header
         activeSection={activeSection}
         onNavigate={handleNavigate}
@@ -102,8 +103,8 @@ function App() {
         onSubmit={handleContactSubmit}
         initialReason={modalState.reason}
       />
-    </>
+    </ThemeProvider>
   );
 }
 
-export default App;;
+export default App;

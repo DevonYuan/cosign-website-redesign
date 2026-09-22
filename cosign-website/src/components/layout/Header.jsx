@@ -1,4 +1,5 @@
 import { NAV_LINKS } from '../../data/navigation';
+import { ThemeSwitcher } from '../ui/ThemeSwitcher';
 
 /**
  * Header/Navigation component — Terminal Titlebar
@@ -40,6 +41,7 @@ export function Header({ activeSection, onNavigate, onSectionChange }) {
               {link.label}
             </a>
           ))}
+          <ThemeSwitcher />
         </nav>
       </div>
     </div>
