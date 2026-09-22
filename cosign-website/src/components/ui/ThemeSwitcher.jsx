@@ -14,10 +14,10 @@ export function ThemeSwitcher() {
       title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
     >
       <span className="theme-switcher__icon" aria-hidden="true">
-        {theme === 'dark' ? '☀' : '☾'}
+        {theme === 'dark' ? '☾' : '☀'}
       </span>
       <span className="theme-switcher__label">
-        {theme === 'dark' ? 'light' : 'dark'}
+        {theme}
       </span>
     </button>
   );

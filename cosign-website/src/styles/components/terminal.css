@@ -1,4 +1,4 @@
-/* Terminal Shared Components — Bright Theme */
+/* Terminal Shared Components — Theme Aware */
 .term {
   background: var(--bg-inset);
   border: 1px solid var(--line);
@@ -60,7 +60,7 @@
   padding-left: 1.4em;
 }
 
-/* Window dots - macOS traffic light style for light theme */
+/* Window dots */
 .dots {
   display: flex;
   gap: 7px;
@@ -74,17 +74,31 @@
   display: block;
 }
 
+/* Dark theme dots (default) - terminal style */
 .dots span:nth-child(1) {
+  background: var(--red);
+}
+
+.dots span:nth-child(2) {
+  background: var(--amber);
+}
+
+.dots span:nth-child(3) {
+  background: var(--green);
+}
+
+/* Light theme dots - macOS traffic light style */
+[data-theme="light"] .dots span:nth-child(1) {
   background: #ff5f57;
   box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
 }
 
-.dots span:nth-child(2) {
+[data-theme="light"] .dots span:nth-child(2) {
   background: #febc2e;
   box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
 }
 
-.dots span:nth-child(3) {
+[data-theme="light"] .dots span:nth-child(3) {
   background: #28ca42;
   box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
 }
@@ -162,6 +176,10 @@ h2 {
   border-color: var(--amber);
   color: var(--amber);
   background: rgba(169, 122, 38, 0.08);
+}
+
+[data-theme="dark"] .cta-secondary:hover {
+  background: rgba(255, 182, 42, 0.06);
 }
 
 /* Hash row */
