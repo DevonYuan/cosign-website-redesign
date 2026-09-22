@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Cosign — approvals that hold up</title>
+  <meta name="description" content="Cosign is a GitHub App for compliant approval workflows, protected issue/PR snapshots, and tamper-evident audit trails for regulated engineering teams.">
+  <meta name="theme-color" content="#060907">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Titlebar / Navigation -->
+  <div class="titlebar">
+    <div class="titlebar-inner">
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <a href="#home" class="titlebar-brand" aria-label="Cosign home">
+        <img src="logo.svg" alt="" class="titlebar-logo" width="28" height="28">
+        <span class="titlebar-path"><b>Cosign</b> — approval audit log</span>
+      </a>
+      <nav class="tabs" role="navigation" aria-label="Main navigation">
+        <a href="#home" class="nav-link current" data-section="home">home</a>
+        <a href="#features" class="nav-link" data-section="features">features</a>
+        <a href="#pricing" class="nav-link" data-section="pricing">pricing</a>
+        <a href="#support" class="nav-link" data-section="support">support</a>
+        <a href="https://github.com/apps/cosign-github" class="nav-link btn-install" target="_blank" rel="noopener noreferrer">install on github</a>
+        <button class="theme-switcher" aria-label="Switch to light theme" title="Switch to light theme">
+          <span class="theme-switcher__icon" aria-hidden="true">☾</span>
+          <span class="theme-switcher__label">dark</span>
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="home" class="hero wrap" aria-labelledby="home-heading">
+      <div class="hero-grid">
+        <div>
+          <p class="prompt-line"><span class="sym">›</span> triggered by approval.requested</p>
+          <h1 id="home-heading">Approvals that still hold up when someone asks for proof.</h1>
+          <p class="lede">
+            Cosign is a GitHub App that freezes the exact issue or pull
+            request being approved, re-checks each signer's identity, and
+            writes a tamper-evident record — so your sign-off means the
+            same thing today and in an audit three years from now.
+          </p>
+          <div class="cta-row">
+            <a href="https://github.com/apps/cosign-github" class="cta-primary" target="_blank" rel="noopener noreferrer">
+              install on github
+            </a>
+            <a href="#features" class="cta-secondary">
+              see how it works
+            </a>
+          </div>
+          <div class="hash-row">
+            <span>content-hash:</span>
+            <code id="hero-hash">a1f4e8...9c2f</code>
+            <span class="tag">frozen</span>
+          </div>
+        </div>
+
+        <div class="term" aria-label="Sample approval audit log">
+          <div class="term-head">
+            <div class="dots"><span></span><span></span><span></span></div>
+            audit log · session #412
+          </div>
+          <div class="term-body">
+            <div class="term-cmd"><span class="sym">›</span> approval.requested <span class="term-mut">#412</span></div>
+            <div class="term-out">cosign: snapshot frozen — content-hash:a1f4e8</div>
+            <div class="term-out">cosign: routed to <span class="term-amber">@m.chen</span>, <span class="term-amber">@d.patel</span></div>
+            <div class="term-rule">───────────────────────────────</div>
+            <div class="term-cmd"><span class="sym">›</span> m.chen re-authenticated <span class="term-ok">✓</span></div>
+            <div class="term-out">signed — "approve for release 4.2"</div>
+            <div class="term-rule">───────────────────────────────</div>
+            <div class="term-cmd"><span class="sym">›</span> d.patel re-authenticated <span class="term-ok">✓</span></div>
+            <div class="term-out">signed — "approve for release 4.2"</div>
+            <div class="term-out">manifest.pdf written</div>
+            <div class="term-out">status: <span class="term-ok">FROZEN</span><span class="caret"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section wrap" aria-labelledby="features-heading">
+      <div class="section-head">
+        <p class="cmd"><span class="sym">›</span> checks.completed <span class="term-ok">6/6</span></p>
+        <h2 id="features-heading">Every approval, checked against the same suite.</h2>
+        <p>
+          Issue comments and merged PRs are easy to edit after the fact.
+          Cosign runs each approval through six checks before it will
+          call a record "signed" — the same six checks, every time.
+        </p>
+      </div>
+
+      <p class="grp-label"><b>review & approval</b> · 3 verified</p>
+      <div class="log-grid">
+        <div class="log-row">
+          <div class="log-top">
+            <span class="log-status">✓ verified</span>
+            <span class="log-file">snapshot.capture</span>
+          </div>
+          <h3>Exact snapshot capture</h3>
+          <p>The issue or PR content is hashed at routing time, so the version a signer reviewed can never quietly drift from the version they approved.</p>
+        </div>
+        <div class="log-row">
+          <div class="log-top">
+            <span class="log-status">✓ verified</span>
+            <span class="log-file">intent.declared</span>
+          </div>
+          <h3>Declared intent review</h3>
+          <p>Each signer sees the exact approval meaning and checklist before deciding to approve, reject, or send it back for changes.</p>
+        </div>
+        <div class="log-row">
+          <div class="log-top">
+            <span class="log-status">✓ verified</span>
+            <span class="log-file">reauth.fresh</span>
+          </div>
+          <h3>Fresh re-authentication</h3>
+          <p>Approvers are challenged again at sign time, so a decision is tied to a live identity check, not a session left open in a browser tab.</p>
+        </div>
+      </div>
+
+      <p class="grp-label"><b>operational controls</b> · 3 verified</p>
+      <div class="log-grid">
+        <div class="log-row">
+          <div class="log-top">
+            <span class="log-status">✓ verified</span>
+            <span class="log-file">manifest.pdf</span>
+          </div>
+          <h3>Audit-ready PDF manifests</h3>
+          <p>A finished approval generates a tamper-evident PDF with signers, timestamps, declared intent, and the frozen record — ready to hand to an auditor.</p>
+        </div>
+        <div class="log-row">
+          <div class="log-top">
+            <span class="log-status">✓ verified</span>
+            <span class="log-file">filing.repo</span>
+          </div>
+          <h3>Repository filing by design</h3>
+          <p>The signed evidence is filed into a repository your org already owns, so the compliance artifact stays in the same place as the work.</p>
+        </div>
+        <div class="log-row">
+          <div class="log-top">
+            <span class="log-status">✓ verified</span>
+            <span class="log-file">drift.detect</span>
+          </div>
+          <h3>Change detection alerts</h3>
+          <p>If the routed issue or PR changes before every signer has acted, the request is flagged stale and pushed back for re-freeze.</p>
+        </div>
+      </div>
+
+      <!-- Compliance Band -->
+      <section class="section band">
+        <div class="wrap">
+          <div class="section-head" style="margin-bottom:0;">
+            <p class="cmd"><span class="sym">›</span> compliance mapping</p>
+            <h2>Built for the frameworks your auditor already knows.</h2>
+            <p>
+              From design review to release sign-off, Cosign gives your team
+              one approval path, anchored to the exact content being
+              reviewed — no shadow spreadsheet, no second system of record.
+            </p>
+            <div class="flag-row">
+              <span class="flag">21 CFR Part 11</span>
+              <span class="flag">eIDAS</span>
+              <span class="flag">ESIGN / UETA</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section wrap" aria-labelledby="pricing-heading">
+      <div class="section-head">
+        <p class="cmd"><span class="sym">~/</span>pricing</p>
+        <h2 id="pricing-heading">Start free, prove it on a real repo, then scale.</h2>
+        <p>Subscription pricing is rolling out now. Pilots run in your own GitHub org, on your own approval workflow.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="plan">
+          <p class="plan-flag">solo repo</p>
+          <p class="plan-name">Starter</p>
+          <p class="plan-price">$0</p>
+          <ul class="plan-list">
+            <li>1 repository</li>
+            <li>Frozen-snapshot routing</li>
+            <li>PDF manifest export</li>
+          </ul>
+          <a href="#" class="plan-cta" data-contact-reason="pricing">install free</a>
+        </div>
+        <div class="plan is-active">
+          <p class="plan-flag on">most teams choose this</p>
+          <p class="plan-name">Team</p>
+          <p class="plan-price">$—<sup>/ seat / mo</sup></p>
+          <ul class="plan-list">
+            <li>Unlimited repositories</li>
+            <li>Re-authentication + drift alerts</li>
+            <li>Org-owned manifest filing</li>
+          </ul>
+          <a href="#support" class="plan-cta" data-contact-reason="beta">request beta access</a>
+        </div>
+        <div class="plan">
+          <p class="plan-flag">regulated orgs</p>
+          <p class="plan-name">Pilot</p>
+          <p class="plan-price">custom</p>
+          <ul class="plan-list">
+            <li>Evaluated in your own org</li>
+            <li>21 CFR / eIDAS mapping review</li>
+            <li>Dedicated rollout support</li>
+          </ul>
+          <a href="#support" class="plan-cta" data-contact-reason="beta">talk to us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support Section -->
+    <section id="support" class="section wrap" style="border-bottom:none;" aria-labelledby="support-heading">
+      <div class="section-head">
+        <p class="cmd"><span class="sym">~/</span>support</p>
+        <h2 id="support-heading">Talk with the Innershell team.</h2>
+        <p>Ask about the product, ask about pricing, or request a pilot to evaluate Cosign in your own GitHub workflow.</p>
+      </div>
+      <div class="support-grid">
+        <div class="support-card">
+          <p class="cmd"><span class="sym">›</span> product overview</p>
+          <h3>Product overview</h3>
+          <p>Learn how Cosign works for issue approvals, PR sign-off, audit integrity, and compliance-friendly filing.</p>
+          <div class="support-links">
+            <a href="#" class="contact-link" data-contact-reason="general">contact us <span>→</span></a>
+          </div>
+        </div>
+        <div class="support-card">
+          <p class="cmd"><span class="sym">›</span> pricing & pilots</p>
+          <h3>Pricing & pilots</h3>
+          <p>Ask about the subscription model, trial access, or early access for a pilot implementation.</p>
+          <div class="support-links">
+            <a href="#pricing" class="contact-link" data-contact-reason="pricing">ask about pricing <span>→</span></a>
+            <a href="#" class="contact-link" data-contact-reason="beta">request beta access <span>→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="wrap" role="contentinfo">
+    <div class="foot-row">
+      <span>© 2026 Innershell. All rights reserved.</span>
+      <span class="foot-prompt"><span class="sym">›</span> monitoring approvals — innershell.io<span class="caret"></span></span>
+    </div>
+  </footer>
+
+  <!-- Contact Modal -->
+  <dialog class="contact-modal" id="contact-modal">
+    <form class="contact-form" id="contact-form">
+      <button type="button" class="modal-close" aria-label="Close">×</button>
+      <h3>Get in touch</h3>
+
+      <div class="field">
+        <label for="contact-reason">Reason</label>
+        <select name="reason" id="contact-reason" required>
+          <option value="general">General question</option>
+          <option value="pricing">I'd like pricing details</option>
+          <option value="beta">I'd like to request beta access</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="contact-name">Name</label>
+        <input type="text" name="name" id="contact-name" required autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="contact-email">Email</label>
+        <input type="email" name="email" id="contact-email" required autocomplete="email">
+      </div>
+
+      <div class="field">
+        <label for="contact-message">Message</label>
+        <textarea name="message" id="contact-message" rows="4" required></textarea>
+      </div>
+
+      <div class="field visually-hidden" aria-hidden="true">
+        <label for="contact-honeypot">Leave this field blank</label>
+        <input type="text" name="website" id="contact-honeypot" tabindex="-1" autocomplete="off">
+      </div>
+      <input type="hidden" name="opened_at" id="contact-opened-at">
+
+      <p class="contact-status" id="contact-status" role="status" aria-live="polite"></p>
+
+      <div class="contact-actions">
+        <button type="button" class="button button-secondary" id="contact-cancel">Cancel</button>
+        <button type="submit" class="button button-primary" id="contact-submit">Send</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
