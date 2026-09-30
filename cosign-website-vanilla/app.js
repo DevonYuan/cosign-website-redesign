@@ -50,31 +50,6 @@
   }
 
   // ============================================================================
-  // HERO HASH ANIMATION
-  // ============================================================================
-  function initHeroHash() {
-    const hashEl = document.getElementById('hero-hash');
-    if (!hashEl) return;
-
-    const chars = '0123456789abcdef';
-    let currentHash = 'a1f4e8...9c2f';
-
-    function generateHash() {
-      let hash = '';
-      for (let i = 0; i < 12; i++) {
-        hash += chars[Math.floor(Math.random() * chars.length)];
-      }
-      return `${hash}...9c2f`;
-    }
-
-    // Update hash every 3 seconds
-    setInterval(() => {
-      currentHash = generateHash();
-      hashEl.textContent = currentHash;
-    }, 3000);
-  }
-
-  // ============================================================================
   // SMOOTH SCROLL & ACTIVE NAV
   // ============================================================================
   function initSmoothScroll() {
@@ -219,7 +194,7 @@
       }
 
       try {
-        const response = await fetch('/api/contact', {
+        const response = await fetch('api/contact.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -256,7 +231,6 @@
   // ============================================================================
   function init() {
     initTheme();
-    initHeroHash();
     initSmoothScroll();
     initContactModal();
   }

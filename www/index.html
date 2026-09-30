@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosign by Innershell</title>
+  <meta
+    name="description"
+    content="Cosign is a GitHub App for compliant approval workflows, protected issue/PR snapshots, and tamper-evident audit trails for regulated engineering teams."
+  />
+  <link rel="icon" type="image/svg+xml" href="public/logo.svg" />
+  <meta name="theme-color" content="#190f22" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <script>
+    /*
+     * Appearance bootstrap. Runs before the stylesheet so the first paint
+     * already uses the right palette — `js/theme.js` takes over afterwards.
+     * Stored preferences: `auto`, `light` or `dark` under `cosign-theme`.
+     */
+    (function () {
+      var STORAGE_KEY = "cosign-theme";
+      var MODES = ["auto", "light", "dark"];
+      var FALLBACK = { light: "#ffffff", dark: "#190f22" };
+
+      try {
+        var stored = null;
+        try {
+          stored = window.localStorage.getItem(STORAGE_KEY);
+        } catch (error) {
+          stored = null;
+        }
+
+        var mode = MODES.indexOf(stored) === -1 ? "auto" : stored;
+        var theme = mode;
+        if (theme === "auto") {
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+
+        var root = document.documentElement;
+        root.dataset.theme = theme;
+        root.dataset.themeMode = mode;
+        root.style.colorScheme = theme;
+
+        /* Collapse the two media-scoped metas into one resolved meta. */
+        var metas = document.querySelectorAll('meta[name="theme-color"]');
+        for (var index = 1; index < metas.length; index += 1) {
+          metas[index].remove();
+        }
+        if (metas.length > 0) {
+          metas[0].removeAttribute("media");
+          metas[0].setAttribute("content", FALLBACK[theme]);
+        }
+      } catch (error) {
+        /* The site must still render without a theme. */
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" data-testid="nav">
+      <a href="#home" class="nav-brand">
+        <img src="public/logo.svg" alt="" class="nav-logo" width="28" height="28" />
+        Cosign by Innershell
+      </a>
+
+      <div
+        class="theme-switch"
+        role="group"
+        aria-label="Color theme"
+        data-testid="theme-toggle"
+      >
+        <button
+          type="button"
+          class="theme-option"
+          data-mode="auto"
+          data-testid="theme-option-auto"
+          aria-pressed="true"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor" />
+          </svg>
+          <span class="visually-hidden">Auto</span>
+        </button>
+        <button
+          type="button"
+          class="theme-option"
+          data-mode="light"
+          data-testid="theme-option-light"
+          aria-pressed="false"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4.5" fill="currentColor" />
+            <g
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <path d="M12 2.5v2.5M12 19v2.5M2.5 12h2.5M19 12h2.5" />
+              <path d="M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8" />
+            </g>
+          </svg>
+          <span class="visually-hidden">Light</span>
+        </button>
+        <button
+          type="button"
+          class="theme-option"
+          data-mode="dark"
+          data-testid="theme-option-dark"
+          aria-pressed="false"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"
+              fill="currentColor"
+            />
+          </svg>
+          <span class="visually-hidden">Dark</span>
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="nav-toggle"
+        data-testid="nav-toggle"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+      >
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+
+      <ul class="nav-menu" id="nav-menu" data-testid="nav-menu">
+        <li><a href="#home" class="nav-link" data-testid="nav-link-home">Home</a></li>
+        <li><a href="#features" class="nav-link" data-testid="nav-link-features">Features</a></li>
+        <li><a href="#pricing" class="nav-link" data-testid="nav-link-pricing">Pricing</a></li>
+        <li><a href="#support" class="nav-link" data-testid="nav-link-support">Support</a></li>
+        <li>
+          <a
+            href="https://github.com/apps/cosign-github"
+            class="nav-link nav-link-cta"
+            data-testid="nav-link-launch"
+          >View GitHub App</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="section section-home" data-testid="section-home">
+      <div class="section-inner">
+        <p class="eyebrow">GitHub approval workflow</p>
+        <h1>Capture compliant approvals before the record changes.</h1>
+        <p class="lede">
+          Cosign is a GitHub App for engineering teams that need approvals that remain defensible under 21 CFR Part 11, eIDAS, and ESIGN/UETA. It freezes the exact issue or pull request content, re-authenticates each signer, and generates a tamper-evident PDF manifest that lives in GitHub rather than in a shadow system.
+        </p>
+        <div class="cta-row">
+          <a href="https://github.com/apps/cosign-github" class="button button-primary">View the GitHub App</a>
+          <a href="#features" class="button button-secondary">See how it works</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section section-features" data-testid="section-features">
+      <div class="section-inner">
+        <p class="eyebrow">Why Cosign</p>
+        <h2>GitHub approvals without the legal ambiguity.</h2>
+        <p class="section-intro">
+          Issue comments and PR merges are easy to edit after the fact. Cosign keeps the original approval record tied to an immutable snapshot, a declared intent, and a verifiable audit trail — so teams can show exactly what was approved and by whom.
+        </p>
+
+        <div id="core-membership" class="module-core-placeholder"></div>
+
+        <div class="billing-section" data-testid="local-modules-section">
+          <h3 class="billing-heading">Built for regulated engineering workflows</h3>
+          <p class="billing-intro" data-testid="billing-intro-local">
+            From design review to release signoff, Cosign gives your team a consistent approval path that is anchored to the precise GitHub content being reviewed.
+          </p>
+          <div id="local-modules-grid" data-testid="modules-grid-local"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="pricing" class="section section-pricing" data-testid="section-pricing">
+      <div class="section-inner">
+        <p class="eyebrow">Pricing</p>
+        <h2>Simple pricing is coming soon.</h2>
+        <p class="section-intro">
+          We are finalizing the subscription model for GitHub organizations, pilot cohorts, and enterprise rollouts. If you want early access or want to understand the roadmap, contact us below.
+        </p>
+        <div class="cta-row">
+          <button type="button" class="button button-primary" data-testid="open-pricing" data-reason="pricing">Request pricing details</button>
+          <button type="button" class="button button-secondary" data-testid="open-beta" data-reason="beta">Become a pilot user</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="support" class="section section-support" data-testid="section-support">
+      <div class="section-inner">
+        <p class="eyebrow">Support</p>
+        <h2>Talk with the Innershell team.</h2>
+        <p class="section-intro">
+          Ask about the product, ask about pricing, or request a pilot to evaluate Cosign in your own GitHub workflow.
+        </p>
+
+        <div class="support-cards">
+          <div class="support-card">
+            <h3>Product overview</h3>
+            <p>
+              Learn how Cosign works for issue approvals, PR signoff, audit integrity, and compliance-friendly filing.
+            </p>
+            <button
+              type="button"
+              class="link link-button"
+              data-testid="open-contact-general"
+              data-reason="general"
+            >Contact us</button>
+          </div>
+
+          <div class="support-card">
+            <h3>Pricing &amp; pilots</h3>
+            <p>
+              Ask about the coming subscription model, trial access, or early access for a pilot implementation.
+            </p>
+            <button
+              type="button"
+              class="link link-button"
+              data-testid="open-pricing-card"
+              data-reason="pricing"
+            >Ask about pricing</button>
+            <button
+              type="button"
+              class="link link-button"
+              data-testid="open-beta-card"
+              data-reason="beta"
+            >Request beta access</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="contact-modal" class="contact-modal" data-testid="contact-modal">
+    <form class="contact-form" data-testid="contact-form">
+      <button
+        type="button"
+        class="modal-close"
+        data-testid="contact-close"
+        aria-label="Close"
+      >&times;</button>
+      <h3 id="contact-modal-title">Get in touch</h3>
+
+      <label class="field">
+        <span>Reason</span>
+        <select name="reason" id="contact-reason" data-testid="contact-reason" required>
+          <option value="general">General question</option>
+          <option value="pricing">I'd like pricing details</option>
+          <option value="beta">I'd like to request beta access</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Name</span>
+        <input type="text" name="name" data-testid="contact-name" required autocomplete="name" />
+      </label>
+
+      <label class="field">
+        <span>Email</span>
+        <input type="email" name="email" data-testid="contact-email" required autocomplete="email" />
+      </label>
+
+      <label class="field">
+        <span>Message</span>
+        <textarea name="message" data-testid="contact-message" rows="4" required></textarea>
+      </label>
+
+      <label class="field visually-hidden" aria-hidden="true">
+        <span>Leave this field blank</span>
+        <input
+          type="text"
+          name="website"
+          data-testid="contact-honeypot"
+          tabindex="-1"
+          autocomplete="off"
+        />
+      </label>
+      <input type="hidden" name="opened_at" data-testid="contact-opened-at" value="" />
+
+      <p
+        class="contact-status"
+        data-testid="contact-status"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+      <div class="contact-actions">
+        <button type="button" class="button button-secondary" data-testid="contact-cancel">Cancel</button>
+        <button type="submit" class="button button-primary" data-testid="contact-submit">Send</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="section-inner footer-inner">
+      <span class="footer-brand">
+        <img src="public/logo.svg" alt="" class="footer-logo" width="20" height="20" />
+        &copy; 2026 Innershell. All rights reserved.
+      </span>
+      <a href="https://github.com/apps/cosign-github" class="footer-link">View GitHub App</a>
+    </div>
+  </footer>
+
+  <script src="js/modules-data.js"></script>
+  <script src="js/features.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/contact.js"></script>
+</body>
+</html>

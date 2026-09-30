@@ -45,13 +45,14 @@
     <section id="home" class="hero wrap" aria-labelledby="home-heading">
       <div class="hero-grid">
         <div>
-          <p class="prompt-line"><span class="sym">›</span> triggered by approval.requested</p>
+          <p class="eyebrow">GitHub approval workflow</p>
           <h1 id="home-heading">Approvals that still hold up when someone asks for proof.</h1>
           <p class="lede">
-            Cosign is a GitHub App that freezes the exact issue or pull
-            request being approved, re-checks each signer's identity, and
-            writes a tamper-evident record — so your sign-off means the
-            same thing today and in an audit three years from now.
+            Cosign is a GitHub App for engineering teams that need approvals
+            that remain defensible under 21 CFR Part 11, eIDAS, and
+            ESIGN/UETA. It freezes the exact issue or PR content,
+            re-authenticates each signer, and generates a tamper-evident
+            PDF manifest that lives in GitHub — not in a shadow system.
           </p>
           <div class="cta-row">
             <a href="https://github.com/apps/cosign-github" class="cta-primary" target="_blank" rel="noopener noreferrer">
@@ -61,30 +62,48 @@
               see how it works
             </a>
           </div>
-          <div class="hash-row">
-            <span>content-hash:</span>
-            <code id="hero-hash">a1f4e8...9c2f</code>
-            <span class="tag">frozen</span>
-          </div>
         </div>
 
-        <div class="term" aria-label="Sample approval audit log">
-          <div class="term-head">
-            <div class="dots"><span></span><span></span><span></span></div>
-            audit log · session #412
-          </div>
-          <div class="term-body">
-            <div class="term-cmd"><span class="sym">›</span> approval.requested <span class="term-mut">#412</span></div>
-            <div class="term-out">cosign: snapshot frozen — content-hash:a1f4e8</div>
-            <div class="term-out">cosign: routed to <span class="term-amber">@m.chen</span>, <span class="term-amber">@d.patel</span></div>
-            <div class="term-rule">───────────────────────────────</div>
-            <div class="term-cmd"><span class="sym">›</span> m.chen re-authenticated <span class="term-ok">✓</span></div>
-            <div class="term-out">signed — "approve for release 4.2"</div>
-            <div class="term-rule">───────────────────────────────</div>
-            <div class="term-cmd"><span class="sym">›</span> d.patel re-authenticated <span class="term-ok">✓</span></div>
-            <div class="term-out">signed — "approve for release 4.2"</div>
-            <div class="term-out">manifest.pdf written</div>
-            <div class="term-out">status: <span class="term-ok">FROZEN</span><span class="caret"></span></div>
+        <div class="app-preview" aria-label="Cosign approval workflow preview">
+          <div class="app-preview-frame">
+            <div class="app-preview-header">
+              <div class="dots"><span></span><span></span><span></span></div>
+              <span class="app-preview-title">Cosign — approval for release 4.2</span>
+            </div>
+            <div class="app-preview-content">
+              <div class="preview-step">
+                <span class="step-icon">❄</span>
+                <div>
+                  <strong>Snapshot frozen</strong>
+                  <span>Content hashed at routing — PR #412 can't drift</span>
+                </div>
+              </div>
+              <div class="preview-step">
+                <span class="step-icon">🔐</span>
+                <div>
+                  <strong>Reviewers re-authenticated</strong>
+                  <span>M. Chen & D. Patel challenged at sign time</span>
+                </div>
+              </div>
+              <div class="preview-step">
+                <span class="step-icon">✍</span>
+                <div>
+                  <strong>Intent declared & signed</strong>
+                  <span>"Approve for release 4.2" — recorded verbatim</span>
+                </div>
+              </div>
+              <div class="preview-step">
+                <span class="step-icon">📄</span>
+                <div>
+                  <strong>Manifest generated</strong>
+                  <span>Tamper-evident PDF filed to your org's repo</span>
+                </div>
+              </div>
+              <div class="preview-status">
+                <span class="status-badge">FROZEN</span>
+                <span>Audit-ready evidence secured</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -93,66 +112,46 @@
     <!-- Features Section -->
     <section id="features" class="section wrap" aria-labelledby="features-heading">
       <div class="section-head">
-        <p class="cmd"><span class="sym">›</span> checks.completed <span class="term-ok">6/6</span></p>
-        <h2 id="features-heading">Every approval, checked against the same suite.</h2>
-        <p>
-          Issue comments and merged PRs are easy to edit after the fact.
-          Cosign runs each approval through six checks before it will
-          call a record "signed" — the same six checks, every time.
+        <p class="eyebrow">Why Cosign</p>
+        <h2 id="features-heading">GitHub approvals without the legal ambiguity.</h2>
+        <p class="section-intro">
+          Issue comments and PR merges are easy to edit after the fact. Cosign keeps the original approval record tied to an immutable snapshot, a declared intent, and a verifiable audit trail — so teams can show exactly what was approved and by whom.
         </p>
       </div>
 
-      <p class="grp-label"><b>review & approval</b> · 3 verified</p>
-      <div class="log-grid">
-        <div class="log-row">
-          <div class="log-top">
-            <span class="log-status">✓ verified</span>
-            <span class="log-file">snapshot.capture</span>
-          </div>
+      <h3 class="feature-group-title">Review & Approval</h3>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">❄</div>
           <h3>Exact snapshot capture</h3>
           <p>The issue or PR content is hashed at routing time, so the version a signer reviewed can never quietly drift from the version they approved.</p>
         </div>
-        <div class="log-row">
-          <div class="log-top">
-            <span class="log-status">✓ verified</span>
-            <span class="log-file">intent.declared</span>
-          </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
           <h3>Declared intent review</h3>
           <p>Each signer sees the exact approval meaning and checklist before deciding to approve, reject, or send it back for changes.</p>
         </div>
-        <div class="log-row">
-          <div class="log-top">
-            <span class="log-status">✓ verified</span>
-            <span class="log-file">reauth.fresh</span>
-          </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔐</div>
           <h3>Fresh re-authentication</h3>
           <p>Approvers are challenged again at sign time, so a decision is tied to a live identity check, not a session left open in a browser tab.</p>
         </div>
       </div>
 
-      <p class="grp-label"><b>operational controls</b> · 3 verified</p>
-      <div class="log-grid">
-        <div class="log-row">
-          <div class="log-top">
-            <span class="log-status">✓ verified</span>
-            <span class="log-file">manifest.pdf</span>
-          </div>
+      <h3 class="feature-group-title">Operational Controls</h3>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📄</div>
           <h3>Audit-ready PDF manifests</h3>
           <p>A finished approval generates a tamper-evident PDF with signers, timestamps, declared intent, and the frozen record — ready to hand to an auditor.</p>
         </div>
-        <div class="log-row">
-          <div class="log-top">
-            <span class="log-status">✓ verified</span>
-            <span class="log-file">filing.repo</span>
-          </div>
+        <div class="feature-card">
+          <div class="feature-icon">📁</div>
           <h3>Repository filing by design</h3>
           <p>The signed evidence is filed into a repository your org already owns, so the compliance artifact stays in the same place as the work.</p>
         </div>
-        <div class="log-row">
-          <div class="log-top">
-            <span class="log-status">✓ verified</span>
-            <span class="log-file">drift.detect</span>
-          </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚠</div>
           <h3>Change detection alerts</h3>
           <p>If the routed issue or PR changes before every signer has acted, the request is flagged stale and pushed back for re-freeze.</p>
         </div>
@@ -162,7 +161,7 @@
       <section class="section band">
         <div class="wrap">
           <div class="section-head" style="margin-bottom:0;">
-            <p class="cmd"><span class="sym">›</span> compliance mapping</p>
+            <p class="eyebrow">Compliance mapping</p>
             <h2>Built for the frameworks your auditor already knows.</h2>
             <p>
               From design review to release sign-off, Cosign gives your team
@@ -182,7 +181,7 @@
     <!-- Pricing Section -->
     <section id="pricing" class="section wrap" aria-labelledby="pricing-heading">
       <div class="section-head">
-        <p class="cmd"><span class="sym">~/</span>pricing</p>
+        <p class="eyebrow">Pricing</p>
         <h2 id="pricing-heading">Start free, prove it on a real repo, then scale.</h2>
         <p>Subscription pricing is rolling out now. Pilots run in your own GitHub org, on your own approval workflow.</p>
       </div>
@@ -226,13 +225,12 @@
     <!-- Support Section -->
     <section id="support" class="section wrap" style="border-bottom:none;" aria-labelledby="support-heading">
       <div class="section-head">
-        <p class="cmd"><span class="sym">~/</span>support</p>
+        <p class="eyebrow">Support</p>
         <h2 id="support-heading">Talk with the Innershell team.</h2>
-        <p>Ask about the product, ask about pricing, or request a pilot to evaluate Cosign in your own GitHub workflow.</p>
+        <p class="section-intro">Ask about the product, ask about pricing, or request a pilot to evaluate Cosign in your own GitHub workflow.</p>
       </div>
       <div class="support-grid">
         <div class="support-card">
-          <p class="cmd"><span class="sym">›</span> product overview</p>
           <h3>Product overview</h3>
           <p>Learn how Cosign works for issue approvals, PR sign-off, audit integrity, and compliance-friendly filing.</p>
           <div class="support-links">
@@ -240,7 +238,6 @@
           </div>
         </div>
         <div class="support-card">
-          <p class="cmd"><span class="sym">›</span> pricing & pilots</p>
           <h3>Pricing & pilots</h3>
           <p>Ask about the subscription model, trial access, or early access for a pilot implementation.</p>
           <div class="support-links">
@@ -256,7 +253,7 @@
   <footer class="wrap" role="contentinfo">
     <div class="foot-row">
       <span>© 2026 Innershell. All rights reserved.</span>
-      <span class="foot-prompt"><span class="sym">›</span> monitoring approvals — innershell.io<span class="caret"></span></span>
+      <a href="https://github.com/apps/cosign-github" class="footer-link">View GitHub App</a>
     </div>
   </footer>
 
