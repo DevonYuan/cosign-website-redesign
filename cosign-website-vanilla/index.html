@@ -11,6 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" media="print" onload="this.media='all'">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -72,28 +74,28 @@
             </div>
             <div class="app-preview-content">
               <div class="preview-step">
-                <span class="step-icon">❄</span>
+                <span class="step-icon"><span class="material-symbols-outlined" aria-hidden="true">archive</span></span>
                 <div>
                   <strong>Snapshot frozen</strong>
                   <span>Content hashed at routing — PR #412 can't drift</span>
                 </div>
               </div>
               <div class="preview-step">
-                <span class="step-icon">🔐</span>
+                <span class="step-icon"><span class="material-symbols-outlined" aria-hidden="true">verified_user</span></span>
                 <div>
                   <strong>Reviewers re-authenticated</strong>
                   <span>M. Chen & D. Patel challenged at sign time</span>
                 </div>
               </div>
               <div class="preview-step">
-                <span class="step-icon">✍</span>
+                <span class="step-icon"><span class="material-symbols-outlined" aria-hidden="true">description</span></span>
                 <div>
                   <strong>Intent declared & signed</strong>
                   <span>"Approve for release 4.2" — recorded verbatim</span>
                 </div>
               </div>
               <div class="preview-step">
-                <span class="step-icon">📄</span>
+                <span class="step-icon"><span class="material-symbols-outlined" aria-hidden="true">picture_as_pdf</span></span>
                 <div>
                   <strong>Manifest generated</strong>
                   <span>Tamper-evident PDF filed to your org's repo</span>
@@ -122,17 +124,17 @@
       <h3 class="feature-group-title">Review & Approval</h3>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">❄</div>
+          <div class="feature-icon"><span class="material-symbols-outlined" aria-hidden="true">archive</span></div>
           <h3>Exact snapshot capture</h3>
           <p>The issue or PR content is hashed at routing time, so the version a signer reviewed can never quietly drift from the version they approved.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">📋</div>
+          <div class="feature-icon"><span class="material-symbols-outlined" aria-hidden="true">assignment</span></div>
           <h3>Declared intent review</h3>
           <p>Each signer sees the exact approval meaning and checklist before deciding to approve, reject, or send it back for changes.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🔐</div>
+          <div class="feature-icon"><span class="material-symbols-outlined" aria-hidden="true">verified_user</span></div>
           <h3>Fresh re-authentication</h3>
           <p>Approvers are challenged again at sign time, so a decision is tied to a live identity check, not a session left open in a browser tab.</p>
         </div>
@@ -141,19 +143,33 @@
       <h3 class="feature-group-title">Operational Controls</h3>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">📄</div>
+          <div class="feature-icon"><span class="material-symbols-outlined" aria-hidden="true">picture_as_pdf</span></div>
           <h3>Audit-ready PDF manifests</h3>
           <p>A finished approval generates a tamper-evident PDF with signers, timestamps, declared intent, and the frozen record — ready to hand to an auditor.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">📁</div>
+          <div class="feature-icon"><span class="material-symbols-outlined" aria-hidden="true">folder</span></div>
           <h3>Repository filing by design</h3>
           <p>The signed evidence is filed into a repository your org already owns, so the compliance artifact stays in the same place as the work.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">⚠</div>
+          <div class="feature-icon"><span class="material-symbols-outlined" aria-hidden="true">sync_problem</span></div>
           <h3>Change detection alerts</h3>
           <p>If the routed issue or PR changes before every signer has acted, the request is flagged stale and pushed back for re-freeze.</p>
+        </div>
+      </div>
+
+      <h3 class="feature-group-title">Trust & Compliance</h3>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><span class="material-symbols-outlined" aria-hidden="true">shield</span></div>
+          <h3>Data sovereignty by default</h3>
+          <p>The approval record stays with the repo and the filing location your organization controls, instead of living only in a third-party system.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><span class="material-symbols-outlined" aria-hidden="true">gavel</span></div>
+          <h3>Regulatory alignment</h3>
+          <p>Cosign is built to support 21 CFR Part 11, eIDAS, ESIGN/UETA, and the data-minimization expectations common in regulated environments.</p>
         </div>
       </div>
 
