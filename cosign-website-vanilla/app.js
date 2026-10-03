@@ -12,40 +12,69 @@
   function initTheme() {
     const themeSwitcher = document.querySelector('.theme-switcher');
     const html = document.documentElement;
-    
-    // Load saved theme or default to dark
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    html.setAttribute('data-theme', savedTheme);
+
+    // Load saved theme or default to 'auto'
+    const savedTheme = localStorage.getItem('theme') || 'auto';
+    applyTheme(savedTheme);
     updateThemeSwitcher(savedTheme);
 
     if (themeSwitcher) {
       themeSwitcher.addEventListener('click', () => {
         const currentTheme = html.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        html.setAttribute('data-theme', newTheme);
+        // Cycle: auto -> light -> dark -> auto
+        const themes = ['auto', 'light', 'dark'];
+        const currentIndex = themes.indexOf(currentTheme);
+        const newTheme = themes[(currentIndex + 1) % themes.length];
+        applyTheme(newTheme);
         localStorage.setItem('theme', newTheme);
         updateThemeSwitcher(newTheme);
       });
+    }
+
+    // Listen for OS theme changes when in auto mode
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', () => {
+      const currentTheme = html.getAttribute('data-theme');
+      if (currentTheme === 'auto') {
+        applyTheme('auto');
+      }
+    });
+  }
+
+  function applyTheme(theme) {
+    const html = document.documentElement;
+
+    if (theme === 'auto') {
+      // Follow OS preference
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    } else {
+      html.setAttribute('data-theme', theme);
     }
   }
 
   function updateThemeSwitcher(theme) {
     const switcher = document.querySelector('.theme-switcher');
     if (!switcher) return;
-    
+
     const icon = switcher.querySelector('.theme-switcher__icon');
     const label = switcher.querySelector('.theme-switcher__label');
-    
-    if (theme === 'dark') {
+
+    if (theme === 'auto') {
+      icon.textContent = '⟳';
+      label.textContent = 'auto';
+      switcher.setAttribute('aria-label', 'Switch to light theme');
+      switcher.setAttribute('title', 'Theme: auto (follows OS) — click for light');
+    } else if (theme === 'dark') {
       icon.textContent = '☾';
       label.textContent = 'dark';
-      switcher.setAttribute('aria-label', 'Switch to light theme');
-      switcher.setAttribute('title', 'Switch to light theme');
-    } else {
+      switcher.setAttribute('aria-label', 'Switch to auto theme');
+      switcher.setAttribute('title', 'Theme: dark — click for auto');
+    } else { // light
       icon.textContent = '☀';
       label.textContent = 'light';
       switcher.setAttribute('aria-label', 'Switch to dark theme');
-      switcher.setAttribute('title', 'Switch to dark theme');
+      switcher.setAttribute('title', 'Theme: light — click for dark');
     }
   }
 
@@ -55,7 +84,7 @@
   function initSmoothScroll() {
     const navLinks = document.querySelectorAll('.nav-link[data-section]');
     const sections = document.querySelectorAll('section[id]');
-    
+
     // Handle nav link clicks
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -171,7 +200,7 @@
     // Form submission
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const submitBtn = document.getElementById('contact-submit');
       submitBtn.disabled = true;
       setStatus('Sending…');
